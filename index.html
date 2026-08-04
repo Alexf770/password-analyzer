@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- Character encoding -->
+    <meta charset="UTF-8">
+
+    <!-- Responsive design -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Page title -->
+    <title>Password Security Analyzer</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <!-- ==========================
+         MAIN CONTAINER
+    =========================== -->
+
+    <div class="container">
+
+        <!-- Project title -->
+
+        <h1>Password Security Analyzer</h1>
+
+        <!-- Project description -->
+
+        <p class="description">
+            Analyze your password strength and receive suggestions to improve its security.
+        </p>
+
+
+
+        <!-- ==========================
+             PASSWORD SECTION
+        =========================== -->
+
+        <section class="password-section">
+
+            <label for="passwordInput">
+                Enter Password
+            </label>
+
+            <div class="input-group">
+
+                <input
+                    type="password"
+                    id="passwordInput"
+                    placeholder="Enter your password">
+
+                <button id="togglePassword">
+                    Show
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==========================
+             STRENGTH SECTION
+        =========================== -->
+
+        <section class="strength-section">
+
+            <h2>Password Strength</h2>
+
+            <div class="strength-bar">
+
+                <div id="strengthFill"></div>
+
+            </div>
+
+            <p id="strengthText">
+                Not analyzed yet
+            </p>
+
+        </section>
+
+
+
+        <!-- ==========================
+             CHECKLIST SECTION
+        =========================== -->
+
+        <section class="checklist-section">
+
+            <h2>Security Checklist</h2>
+
+            <ul>
+
+                <li id="lengthCheck">
+                    ☐ At least 8 characters
+                </li>
+
+                <li id="uppercaseCheck">
+                    ☐ Contains an uppercase letter
+                </li>
+
+                <li id="lowercaseCheck">
+                    ☐ Contains a lowercase letter
+                </li>
+
+                <li id="numberCheck">
+                    ☐ Contains a number
+                </li>
+
+                <li id="specialCheck">
+                    ☐ Contains a special character
+                </li>
+
+            </ul>
+
+        </section>
+
+
+
+        <!-- ==========================
+             SUGGESTIONS SECTION
+        =========================== -->
+
+        <section class="suggestions-section">
+
+            <h2>Suggestions</h2>
+
+            <p id="suggestionsText">
+
+                Enter a password to receive suggestions.
+
+            </p>
+
+        </section>
+
+    </div>
+
+
+
+    <!-- External JavaScript -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
