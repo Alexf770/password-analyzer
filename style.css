@@ -75,6 +75,12 @@ input {
     border-radius: 6px;
 }
 
+#passwordLength {
+    width: 100%;
+    padding: 0;
+    border: none;
+}
+
 button {
     padding: 12px 18px;
     cursor: pointer;
@@ -88,6 +94,43 @@ button {
 
 button:hover {
     background-color: #1d56b5;
+}
+
+/* ==========================
+   DIVIDER
+========================== */
+
+.divider {
+    margin: 20px 0;
+    border: none;
+    border-top: 1px solid #dddddd;
+}
+
+/* ==========================
+   PASSWORD LENGTH
+========================== */
+
+.length-control {
+    margin: 20px 0;
+}
+
+.length-control label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.length-control input {
+    width: 100%;
+}
+
+/* ==========================
+   PASSWORD GENERATOR
+========================== */
+
+#generatePassword {
+    margin-top: 20px;
+    width: 100%;
 }
 
 /* ==========================

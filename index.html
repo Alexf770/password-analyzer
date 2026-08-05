@@ -60,6 +60,26 @@
 
             </div>
 
+            <hr class="divider">
+
+            <div class="length-control">
+                <label for="passwordLength">
+                    Password Length:
+                    <span id="lengthValue">16</span>
+                </label>
+
+                <input
+                    type="range"
+                    id="passwordLength"
+                    min="8"
+                    max="32"
+                    value="16">
+            </div>
+
+            <button id="generatePassword">
+                Generate Secure Password
+            </button>
+
         </section>
 
 
@@ -80,6 +100,18 @@
 
             <p id="strengthText">
                 Not analyzed yet
+            </p>
+
+            <p id="entropyText">
+
+            </p>
+
+            <p id="entropyLevel">
+
+            </p>
+
+            <p id="crackTime">
+
             </p>
 
         </section>
