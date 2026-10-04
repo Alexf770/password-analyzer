@@ -37,6 +37,16 @@ const lowercaseCheck = document.getElementById("lowercaseCheck");
 const numberCheck = document.getElementById("numberCheck");
 const specialCheck = document.getElementById("specialCheck");
 
+// Statistics
+const lengthStat = document.getElementById("lengthStat");
+const uniqueStat = document.getElementById("uniqueStat");
+const repeatedStat = document.getElementById("repeatedStat");
+const diversityStat = document.getElementById("diversityStat");
+const uppercaseStat = document.getElementById("uppercaseStat");
+const lowercaseStat = document.getElementById("lowercaseStat");
+const numberStat = document.getElementById("numberStat");
+const specialStat = document.getElementById("specialStat");
+
 // Suggestions
 const suggestionsText = document.getElementById("suggestionsText");
 
@@ -222,6 +232,48 @@ function checkCommonPassword(password) {
 }
 
 // =========================
+// PASSWORD STATISTICS
+// =========================
+
+function updateStatistics(password) {
+
+    const passwordLength = password.length;
+
+    const uniqueCharacters = new Set(password).size;
+
+    const repeatedCharacters = password.length - uniqueCharacters;
+
+    const characterDiversity = password.length === 0
+        ? 0
+        : (uniqueCharacters / password.length) * 100;
+
+    const uppercaseCount = (password.match(/[A-Z]/g) || []).length;
+
+    const lowercaseCount = (password.match(/[a-z]/g) || []).length;
+
+    const numberCount = (password.match(/[0-9]/g) || []).length;
+
+    const specialCount = (password.match(/[^A-Za-z0-9]/g) || []).length;
+
+    lengthStat.textContent = `Password Length: ${passwordLength}`;
+
+    uniqueStat.textContent = `Unique Characters: ${uniqueCharacters}`;
+
+    repeatedStat.textContent = `Repeated Characters: ${repeatedCharacters}`;
+
+    diversityStat.textContent =
+        `Character Diversity: ${characterDiversity.toFixed(1)}%`;
+
+    uppercaseStat.textContent = `Uppercase Letters: ${uppercaseCount}`;
+
+    lowercaseStat.textContent = `Lowercase Letters: ${lowercaseCount}`;
+
+    numberStat.textContent = `Numbers: ${numberCount}`;
+
+    specialStat.textContent = `Special Characters: ${specialCount}`;
+}
+
+// =========================
 // CALCULATE PASSWORD ENTROPY
 // =========================
 
@@ -346,6 +398,9 @@ function updateAnalysis() {
 
     // Get the password entered by the user
     const password = passwordInput.value;
+    const uniqueCharacters = new Set(password).size;
+    const repeatedCharacters = password.length - uniqueCharacters;
+    const hasCommonPassword = checkCommonPassword(password);
 
     // Reset display if password is empty
     if (password.length === 0) {
@@ -365,7 +420,6 @@ function updateAnalysis() {
     const hasLowercase = checkLowercase(password);
     const hasNumber = checkNumber(password);
     const hasSpecial = checkSpecialCharacter(password);
-    const hasCommonPassword = checkCommonPassword(password);
 
     // Calculate password entropy
     const entropy = calculateEntropy(password);
@@ -421,34 +475,77 @@ function updateAnalysis() {
             .join("<br>");
     }
 
-    // Calculate password strength score (0-5)
-    const score = 
-        (hasLength ? 1 : 0) +
-        (hasUppercase ? 1 : 0) +
-        (hasLowercase ? 1 : 0) +
-        (hasNumber ? 1 : 0) +
-        (hasSpecial ? 1 : 0);
+    // Calculate password strength score 
+    let score = 0;
 
-    const strengthPercentage = (score / 5) * 100;
+    // Length
+    if (password.length >= 8) {
+        score += 20;
+    }
+
+    if (password.length >= 12) {
+        score += 10;
+    }
+
+    if (password.length >= 16) {
+        score += 10;
+    }
+
+    // Character types
+    if (hasUppercase) {
+        score += 10;
+    }
+
+    if (hasLowercase) {
+        score += 10;
+    }
+
+    if (hasNumber) {
+        score += 10;
+    }
+
+    if (hasSpecial) {
+        score += 15;
+    }
+
+    // Character diversity
+    if (password.length > 0) {
+
+        const diversity = uniqueCharacters / password.length;
+
+        if (diversity >= 0.75) {
+            score += 15;
+        } else if (diversity >= 0.5) {
+            score += 8;
+        }
+    }
+
+    // Penalties
+    if (repeatedCharacters > 0) {
+        score -= repeatedCharacters * 2;
+    }
+
+    if (hasCommonPassword) {
+        score -= 25;
+    }
+
+    // Keep score between 0 and 100
+    score = Math.max(0, Math.min(score, 100));
+
+    const strengthPercentage = score;
     strengthFill.style.width = strengthPercentage + "%";
 
     // Update strength rating and bar color
-    if (score <= 1) {
+    if (score < 30) {
         strengthText.textContent = "Weak";
         strengthFill.style.backgroundColor = "red";
-    }
-
-    else if (score <= 3) {
+    } else if (score < 50) {
         strengthText.textContent = "Medium";
         strengthFill.style.backgroundColor = "orange";
-    }
-
-    else if (score === 4) {
+    } else if (score < 75) {
         strengthText.textContent = "Strong";
         strengthFill.style.backgroundColor = "green";
-    }
-
-    else {
+    } else {
         strengthText.textContent = "Excellent";
         strengthFill.style.backgroundColor = "blue";
     }
@@ -474,5 +571,7 @@ function updateAnalysis() {
     specialCheck.textContent = hasSpecial
         ? "✔ Contains a special character"
         : "✖ Contains a special character";
+
+    updateStatistics(password);
 }
 
