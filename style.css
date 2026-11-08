@@ -169,6 +169,50 @@ li {
     margin-bottom: 10px;
 }
 
+/* =========================
+   PASSWORD BREACH CHECK
+========================= */
+
+.breach-result {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 6px;
+    background-color: #f1f1f1;
+    color: #555;
+    line-height: 1.5;
+}
+
+.breach-result.safe {
+    background-color: #e6f4ea;
+    color: #137333;
+    border-left: 4px solid #188038;
+}
+
+.breach-result.warning {
+    background-color: #fce8e6;
+    color: #b3261e;
+    border-left: 4px solid #d93025;
+}
+
+.breach-result.error {
+    background-color: #fff4e5;
+    color: #8a4b08;
+    border-left: 4px solid #e69500;
+}
+
+/* Privacy explanation */
+
+.privacy-note {
+    font-size: 13px;
+    color: #666;
+    background-color: #f4f6f9;
+    padding: 12px;
+    border-radius: 6px;
+    margin-top: 12px;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
 /* ==========================
    SUGGESTIONS
 ========================== */

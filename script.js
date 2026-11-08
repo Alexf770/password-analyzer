@@ -47,6 +47,10 @@ const lowercaseStat = document.getElementById("lowercaseStat");
 const numberStat = document.getElementById("numberStat");
 const specialStat = document.getElementById("specialStat");
 
+// Breach Check
+const checkBreachButton = document.getElementById("checkBreach");
+const breachText = document.getElementById("breachText");
+
 // Suggestions
 const suggestionsText = document.getElementById("suggestionsText");
 
@@ -79,6 +83,9 @@ const allCharacters =
 
 // Analyze while typing
 passwordInput.addEventListener("input", updateAnalysis);
+
+// Check Password Breach
+checkBreachButton.addEventListener("click", checkPasswordBreach);
 
 // Show / Hide password
 togglePassword.addEventListener("click", togglePasswordVisibility);
@@ -389,6 +396,146 @@ function estimateCrackTime(entropy) {
     }
 
 }
+
+// =========================
+// PASSWORD BREACH CHECK
+// =========================
+
+async function checkPasswordBreach() {
+
+    // Prevent multiple simultaneous checks
+    if (checkBreachButton.disabled) {
+        return;
+    }
+
+    const password = passwordInput.value;
+
+    // Make sure the user entered a password
+    if (password.length === 0) {
+
+        breachText.className = "breach-result error";
+
+        breachText.textContent = "Please enter a password first.";
+
+        return;
+    }
+
+    // Check whether the browser supports secure hashing
+    if (!window.crypto || !window.crypto.subtle) {
+
+        breachText.className = "breach-result error";
+
+        breachText.textContent =
+            "Your browser does not support secure password checking.";
+
+        return;
+    }
+
+    try {
+
+        // Update the interface
+        checkBreachButton.disabled = true;
+        checkBreachButton.textContent = "Checking...";
+
+        breachText.className = "breach-result";
+
+        breachText.textContent = "Checking password security...";
+
+        // Convert password into a SHA-1 hash locally
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+
+        const hashBuffer = await crypto.subtle.digest("SHA-1", data);
+
+        // Convert hash into hexadecimal characters
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+        const hash = hashArray
+            .map(byte => byte.toString(16).padStart(2, "0"))
+            .join("")
+            .toUpperCase();
+
+        // Separate the first 5 characters from the remaining hash
+        const prefix = hash.substring(0, 5);
+        const suffix = hash.substring(5);
+
+        // Request matching hash suffixes from the API
+        const response = await fetch(
+            `https://api.pwnedpasswords.com/range/${prefix}`,
+            {
+                headers: {
+                    "Add-Padding": "true"
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Unable to contact the breach-checking service.");
+        }
+
+        const responseText = await response.text();
+
+        // Search the returned results locally
+        const matchingLine = responseText
+            .split("\n")
+            .find(line => line.split(":")[0].trim() === suffix);
+
+        // Extract the number of known exposures
+        const count = matchingLine
+            ? Number(matchingLine.split(":")[1].trim())
+            : 0;
+
+        // Validate the API response count
+        if (!Number.isSafeInteger(count) || count < 0) {
+            throw new Error("Invalid breach-checking response.");
+        }
+
+        // Make sure the password hasn't changed during the request
+        if (passwordInput.value !== password) {
+
+            breachText.className = "breach-result error";
+
+            breachText.textContent =
+                "Password changed. Run the check again.";
+
+            return;
+        }
+
+        // Display the result
+        if (count > 0) {
+
+            breachText.className = "breach-result warning";
+
+            breachText.textContent =
+                `Warning! This password has appeared in ${count.toLocaleString()} known exposures. Choose a different password.`;
+
+        } else {
+
+            breachText.className = "breach-result safe";
+
+            breachText.textContent =
+                "Good news! This password was not found in the known breach database.";
+
+        }
+
+    } catch (error) {
+
+        console.error("Breach check error:", error);
+
+        breachText.className = "breach-result error";
+
+        breachText.textContent =
+            "Unable to check this password. Please try again.";
+
+    } finally {
+
+        checkBreachButton.disabled = false;
+
+        checkBreachButton.textContent = "Check for Breaches";
+
+    }
+}
+
 
 // =========================
 // UPDATE PASSWORD ANALYSIS

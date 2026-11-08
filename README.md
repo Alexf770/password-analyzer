@@ -23,6 +23,33 @@ I built this project to learn more about cybersecurity concepts and improve my w
   - Medium
   - Strong
   - Excellent
+- Password entropy calculation
+- Estimated password cracking time
+- Password statistics:
+  - Total password length
+  - Unique characters
+  - Repeated characters
+  - Character diversity
+  - Uppercase, lowercase, number, and special character counts
+- Common password detection
+- Password improvement suggestions
+- Secure password generator:
+  - Customizable password length (8–32 characters)
+  - Uppercase, lowercase, numbers, and special characters
+- Password breach checker:
+  - Have I Been Pwned API integration
+  - Privacy-preserving k-anonymity lookup
+  - Local SHA-1 hashing
+  - Exposure count and visual result feedback
+
+## Privacy and Security
+
+- Passwords are analyzed locally in the browser.
+- The original password is never sent to the Have I Been Pwned API.
+- The breach checker uses SHA-1 hashing and the k-anonymity model.
+- Only the first five characters of the password hash are sent to the API.
+- The remaining hash is compared locally against the API response.
+- The application does not intentionally store or save passwords.
 
 ## Screenshots
 
@@ -40,31 +67,28 @@ I built this project to learn more about cybersecurity concepts and improve my w
 - HTML
 - CSS
 - JavaScript
+- Web Crypto API
+- Have I Been Pwned Pwned Passwords API
 
 ## How It Works
 
-The application analyzes a password as the user types.
+The application analyzes passwords in real time and evaluates multiple security characteristics.
 
-Each security requirement contributes one point to the overall score:
+- Password requirements are checked as the user types.
+- A strength score (0–100) is calculated based on password characteristics.
+- Password entropy and estimated cracking time provide additional security insights.
+- Common passwords are identified to help users avoid predictable choices.
+- The password generator creates passwords using customizable length and character options.
+- The breach checker uses the Have I Been Pwned API and k-anonymity to check for known password exposures without sending the original password.
 
-- Length requirement: +1
-- Uppercase letter: +1
-- Lowercase letter: +1
-- Number: +1
-- Special character: +1
-
-The total score (0-5) is converted into a percentage and displayed through a visual strength bar.
+The results are displayed through a visual strength meter, security statistics, and feedback messages.
 
 ## Future Improvements
 
-Planned features:
+Planned improvements:
 
-- Password security suggestions
-- Common password detection
-- Password entropy calculation
-- Estimated cracking time
-- Secure password generator
-- Improved password security recommendations
+- Improve the user interface and mobile responsiveness.
+- Add more comprehensive testing and error handling.
 
 ## Project Status
 
